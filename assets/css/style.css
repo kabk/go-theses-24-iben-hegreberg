@@ -250,7 +250,7 @@ body {
 
 .reference:hover{
   background-color: var(--color-accent);
-
+  cursor: text;
 }
 
 .footnotes{
@@ -415,6 +415,10 @@ a {
 
 @media (max-width: 779px) {
 
+  .header {
+    padding: 2vw;
+  }
+
   /* your 'mobile' overriding css properties here */
   .chapter{
     padding:2vw;
@@ -515,6 +519,8 @@ a {
     font-size: 0.5rem;
     line-height: 0.5rem;
   }
+
+  
 
   .none{
     display: none;

@@ -73,35 +73,54 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Second IntersectionObserver for footnotes
+
     const footnotes = document.querySelectorAll('.text div a[href^="#fn"]');
-    const footnotesContainer = document.querySelector('.footnotes');
+const footnotesContainer = document.querySelector('.footnotes');
 
-    const footnoteObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-            const footnoteId = entry.target.getAttribute('href').substring(1);
-            const displayedFootnote = footnotesContainer.querySelector('#displayed-' + footnoteId);
+const footnoteObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+        const footnoteId = entry.target.getAttribute('href').substring(1);
+        const displayedFootnote = footnotesContainer.querySelector('#displayed-' + footnoteId);
 
-            if (entry.isIntersecting) {
-                if (!displayedFootnote) {
-                    const footnoteText = document.getElementById(footnoteId).textContent;
-                    // Create a new <p> element and give it the class "footnote-content"
-                    const newFootnote = document.createElement('p');
-                    newFootnote.id = 'displayed-' + footnoteId;
-                    newFootnote.classList.add('footnote-content');
-                    newFootnote.textContent = footnoteText;
-                    footnotesContainer.appendChild(newFootnote);
-                }
-            } else {
-                if (displayedFootnote) {
-                    displayedFootnote.remove();
-                }
+        if (entry.isIntersecting) {
+            if (!displayedFootnote) {
+                const footnoteText = document.getElementById(footnoteId).textContent;
+                // Create a new <p> element and give it the class "footnote-content"
+                const newFootnote = document.createElement('p');
+                newFootnote.id = 'displayed-' + footnoteId;
+                newFootnote.classList.add('footnote-content');
+                newFootnote.textContent = footnoteText;
+                footnotesContainer.appendChild(newFootnote);
             }
-        });
-    }, { threshold: 0.5 });
-
-    footnotes.forEach(function(footnote) {
-        footnoteObserver.observe(footnote);
+        } else {
+            if (displayedFootnote) {
+                displayedFootnote.remove();
+            }
+        }
     });
+}, { threshold: 0.5 });
+
+// Iterate through each footnote link and set up event listeners
+footnotes.forEach(function(footnote) {
+    footnote.addEventListener('mouseenter', function() {
+        const footnoteId = footnote.getAttribute('href').substring(1);
+        const displayedFootnote = footnotesContainer.querySelector('#displayed-' + footnoteId);
+        if (displayedFootnote) {
+            displayedFootnote.style.color = 'rgb(200, 230, 255)'; // Change color to red on hover
+        }
+    });
+
+    footnote.addEventListener('mouseleave', function() {
+        const footnoteId = footnote.getAttribute('href').substring(1);
+        const displayedFootnote = footnotesContainer.querySelector('#displayed-' + footnoteId);
+        if (displayedFootnote) {
+            displayedFootnote.style.color = ''; // Reset color on mouse leave
+        }
+    });
+
+    // Observe the footnote for intersection
+    footnoteObserver.observe(footnote);
+});
 
 // IntersectionObserver for .text div
 const textDiv = document.querySelector('.text');
